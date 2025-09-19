@@ -621,6 +621,14 @@ body.dark-mode .info h2 {
     color: #ffffff;
 }
 
+/* Override gradient text in dark mode for better visibility */
+body.dark-mode .info h2 {
+    background: linear-gradient(135deg, #ffffff, #48cae4, #90cdf4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 body.dark-mode .info h6 {
     color: #b0b0b0;
 }
@@ -1153,30 +1161,6 @@ body.dark-mode .hero {
     gap: 3rem;
     flex: 1;
     max-width: 500px;
-    text-align: left;
-    margin-left: 2rem;
-    position: relative;
-}
-
-.hero-top .content::before {
-    content: '';
-    position: absolute;
-    top: -20px;
-    left: -20px;
-    right: -20px;
-    bottom: -20px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(0, 123, 255, 0.05));
-    border-radius: 20px;
-    z-index: -1;
-    opacity: 0;
-    transform: scale(0.8);
-    transition: all var(--duration-slow) var(--ease-spring);
-    backdrop-filter: blur(10px);
-}
-
-.hero-top .content:hover::before {
-    opacity: 1;
-    transform: scale(1);
 }
 
 .person-img {
@@ -1320,6 +1304,44 @@ body.dark-mode .hero {
 
 .contact-me a:hover {
     transform: translateY(-8px) scale(1.2) rotate(5deg);
+}
+
+/* Social logo images styling */
+.contact-me .social-logo {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    padding: 0.6rem;
+    border-radius: 15px;
+    transition: all var(--duration-medium) var(--ease-spring);
+    position: relative;
+    overflow: hidden;
+    border: 2px solid transparent;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    will-change: transform, background, box-shadow;
+    object-fit: contain;
+    display: block;
+}
+
+.contact-me a:hover .social-logo {
+    background: linear-gradient(135deg, #0077b6, #48cae4);
+    transform: scale(1.1) rotate(-5deg);
+    box-shadow: 
+        0 15px 35px rgba(0, 119, 182, 0.4),
+        0 0 0 8px rgba(0, 119, 182, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    filter: brightness(0) invert(1); /* Makes logo white on hover */
+}
+
+/* Specific hover colors for each social platform */
+.contact-me a:nth-child(1):hover .social-logo {
+    background: linear-gradient(135deg, #0077b5, #004182);
+    animation: socialPulse 0.6s ease;
+}
+
+.contact-me a:nth-child(2):hover .social-logo {
+    background: linear-gradient(135deg, #333, #24292e);
+    animation: socialPulse 0.6s ease 0.1s;
 }
 
 .contact-me i{
