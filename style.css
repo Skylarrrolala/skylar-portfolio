@@ -1111,6 +1111,16 @@ body.dark-mode #theme-toggle-btn:hover {
     pointer-events: none;
 }
 
+/* Hide light overlay in dark mode */
+body.dark-mode .bg-img::before {
+    background: linear-gradient(
+        135deg,
+        rgba(45, 55, 72, 0.7) 0%,
+        rgba(26, 32, 44, 0.6) 50%,
+        rgba(43, 108, 176, 0.5) 100%
+    ) !important;
+}
+
 .bg-img img{
     width: 60%;
     height: 100%;
@@ -1127,19 +1137,14 @@ body.dark-mode #theme-toggle-btn:hover {
 }
 
 /* Dark mode background adjustments */
-body.dark-mode .bg-img::before {
-    background: linear-gradient(
-        135deg,
-        rgba(45, 55, 72, 0.4) 0%,
-        rgba(26, 32, 44, 0.2) 30%,
-        rgba(43, 108, 176, 0.1) 70%,
-        transparent 100%
-    );
+body.dark-mode .bg-img img {
+    opacity: 1;
+    filter: none;
 }
 
-body.dark-mode .bg-img img {
-    opacity: 0.7;
-    filter: brightness(0.8) contrast(1.1);
+/* Dark mode hero section background */
+body.dark-mode .hero {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 50%, #2b6cb0 100%);
 }
 
 .hero-top .content{
