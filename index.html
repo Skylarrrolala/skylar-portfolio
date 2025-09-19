@@ -180,7 +180,7 @@
                 </div>
                 <div class="edu-item">
                     <div class="edu-logo">
-                        <img src="./images/csppv2.png" alt="Collingwood School OF Phnom Penh logo">
+                        <img src="./images/CSPPv2.png" alt="Collingwood School OF Phnom Penh logo">
                     </div>
                     <div class="edu-content">
                         <h6>Collingwood School of Phnom Penh</h6>
@@ -560,39 +560,55 @@
         
     </footer>
     <script>
-        // Scroll-triggered animation for skills grid items
-        const skillItems = document.querySelectorAll('.skills .grid-item');
-        skillItems.forEach(item => {
-            item.classList.add('hidden-skill');
-        });
+        // Optimized intersection observer configuration
+        const observerConfig = {
+            threshold: [0.1, 0.25],
+            rootMargin: '0px 0px -50px 0px'
+        };
 
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.remove('hidden-skill');
-                    entry.target.classList.add('slideInSkill');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.3 });
-
-        skillItems.forEach(item => {
-            observer.observe(item);
-        });
-
-        // Enhanced scroll-triggered animations for all sections
-        const animatedElements = document.querySelectorAll('.aboutme, .education-experience, .portfolio, .blog, .contact, .BERRIES');
-        
+        // Combined scroll-triggered animation observer
         const scrollObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-in');
+                    // Handle different element types
+                    if (entry.target.classList.contains('skills')) {
+                        // Skills section specific animations
+                        const skillItems = entry.target.querySelectorAll('.grid-item');
+                        skillItems.forEach((item, index) => {
+                            setTimeout(() => {
+                                item.classList.remove('hidden-skill');
+                                item.classList.add('slideInSkill');
+                            }, index * 100);
+                        });
+                    } else if (entry.target.classList.contains('edu-item') || entry.target.classList.contains('exp-item')) {
+                        // Education/Experience items
+                        entry.target.classList.remove('hidden-item');
+                        entry.target.classList.add('slide-in');
+                    } else {
+                        // General sections
+                        entry.target.classList.remove('hidden-scroll');
+                        entry.target.classList.add('animate-in');
+                    }
+                    
+                    // Unobserve after animation to improve performance
+                    scrollObserver.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.2 });
+        }, observerConfig);
 
-        animatedElements.forEach(element => {
-            element.classList.add('hidden-scroll');
+        // Initialize all animated elements
+        const allAnimatedElements = document.querySelectorAll('.aboutme, .education-experience, .portfolio, .blog, .contact, .BERRIES, .skills, .edu-item, .exp-item');
+        
+        allAnimatedElements.forEach(element => {
+            if (element.classList.contains('skills')) {
+                const skillItems = element.querySelectorAll('.grid-item');
+                skillItems.forEach(item => item.classList.add('hidden-skill'));
+            } else if (element.classList.contains('edu-item') || element.classList.contains('exp-item')) {
+                element.classList.add('hidden-item');
+            } else {
+                element.classList.add('hidden-scroll');
+            }
+            
             scrollObserver.observe(element);
         });
 
@@ -611,32 +627,64 @@
             });
         }, 200);
 
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
+        // Throttle function for better scroll performance
+        function throttle(func, limit) {
+            let inThrottle;
+            return function() {
+                const args = arguments;
+                const context = this;
+                if (!inThrottle) {
+                    func.apply(context, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            }
+        }
+
+        // Optimized navbar scroll effect with requestAnimationFrame
+        let isScrolling = false;
+        
+        function updateNavbar() {
             if (window.scrollY > 100) {
                 navbarHeader.classList.add('nav-scrolled');
             } else {
                 navbarHeader.classList.remove('nav-scrolled');
             }
-        });
+            isScrolling = false;
+        }
 
-        // Animate education and experience items individually
-        const eduItems = document.querySelectorAll('.edu-item, .exp-item');
-        const itemObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('slide-in');
-                    }, index * 100); // Stagger the animations
-                    itemObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.3 });
+        window.addEventListener('scroll', throttle(() => {
+            if (!isScrolling) {
+                requestAnimationFrame(updateNavbar);
+                isScrolling = true;
+            }
+        }, 16), { passive: true }); // 60fps throttling
 
-        eduItems.forEach(item => {
-            item.classList.add('hidden-item');
-            itemObserver.observe(item);
-        });
+        // Remove redundant item observer as it's now handled by the main scrollObserver
+        // Optimized skills progress bar animation
+        const skillsSectionForProgress = document.getElementById('Skills');
+        if (skillsSectionForProgress) {
+            const skillsProgressObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Delay progress bars slightly after skill items animate
+                        setTimeout(() => {
+                            const progressBars = document.querySelectorAll('.progress-bar');
+                            progressBars.forEach((bar, index) => {
+                                setTimeout(() => {
+                                    const progress = bar.getAttribute('data-progress');
+                                    bar.style.setProperty('--progress', progress + '%');
+                                    bar.classList.add('animate');
+                                }, index * 100);
+                            });
+                        }, 500);
+                        skillsProgressObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            skillsProgressObserver.observe(skillsSectionForProgress);
+        }
 
         let navbar = document.querySelector(".nav-links")
         let humbergur = document.querySelector(".humburger")
@@ -713,13 +761,23 @@
             console.log('Legacy function called - should not happen');
         }
 
-        // Scroll Progress Bar
-        window.addEventListener('scroll', () => {
+        // Optimized Scroll Progress Bar with requestAnimationFrame
+        let scrollProgressRAF = false;
+        
+        function updateScrollProgress() {
             const scrollProgress = document.querySelector('.scroll-progress');
             const scrollTotal = document.documentElement.scrollHeight - window.innerHeight;
             const scrollPercent = (window.scrollY / scrollTotal) * 100;
             scrollProgress.style.width = scrollPercent + '%';
-        });
+            scrollProgressRAF = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!scrollProgressRAF) {
+                requestAnimationFrame(updateScrollProgress);
+                scrollProgressRAF = true;
+            }
+        }, { passive: true });
 
         // Dark Mode Toggle
         const themeToggleBtn = document.getElementById('theme-toggle-btn');
@@ -778,32 +836,6 @@
 
         // Start typing animation
         setTimeout(typeWriter, 1000);
-
-        // Skill Progress Bar Animation
-        const progressBars = document.querySelectorAll('.progress-bar');
-        
-        const animateProgressBars = () => {
-            progressBars.forEach(bar => {
-                const progress = bar.getAttribute('data-progress');
-                bar.style.setProperty('--progress', progress + '%');
-                bar.classList.add('animate');
-            });
-        };
-
-        // Trigger progress bar animation when skills section is visible
-        const skillsSection = document.getElementById('Skills');
-        const skillsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateProgressBars();
-                    skillsObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.5 });
-
-        if (skillsSection) {
-            skillsObserver.observe(skillsSection);
-        }
     </script>
     
     <!-- Floating Contact Button -->

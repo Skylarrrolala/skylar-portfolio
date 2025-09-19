@@ -5,13 +5,13 @@
     mix-blend-mode: multiply;
 }
 
-/* Service Cards */
+/* Service Cards - Modern Micro-interactions */
 .service-card {
     background: linear-gradient(145deg, #ffffff, #f8fafc);
     border-radius: 16px;
     padding: 2rem;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 8px 25px rgba(0, 0, 0, 0.06);
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--duration-slow) var(--ease-spring);
     border: 1px solid rgba(0, 0, 0, 0.05);
     text-align: center;
     height: 100%;
@@ -19,13 +19,41 @@
     flex-direction: column;
     position: relative;
     color: #2d3748;
+    will-change: transform, box-shadow;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform var(--duration-slow) var(--ease-smooth);
+    pointer-events: none;
+}
+
+.service-card:hover::before {
+    transform: translateX(100%);
 }
 
 .service-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12), 0 12px 30px rgba(0, 0, 0, 0.08);
-    border-color: rgba(0, 0, 0, 0.08);
-    background: linear-gradient(145deg, #ffffff, #f1f5f9);
+    transform: translate3d(0, var(--translate-hover), 0) scale(var(--scale-hover)) rotate(var(--rotate-hover));
+    box-shadow: 
+        0 40px 80px rgba(0, 123, 255, 0.15), 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(0, 123, 255, 0.1);
+    border-color: rgba(0, 123, 255, 0.2);
+    background: linear-gradient(145deg, #ffffff, #f0f8ff);
+}
+
+.service-card:active {
+    transform: translate3d(0, -2px, 0) scale(var(--scale-press));
+    transition: transform var(--duration-fast) var(--ease-smooth);
 }
 @keyframes fadeInLogo {
     to {
@@ -127,6 +155,140 @@ header, .header-info h4, .header-info h6 {
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
+/* Modern Animation System - CSS Custom Properties */
+:root {
+    /* Animation Timing Functions */
+    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    --ease-elastic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    /* Animation Durations */
+    --duration-fast: 0.2s;
+    --duration-medium: 0.4s;
+    --duration-slow: 0.8s;
+    --duration-slower: 1.2s;
+    
+    /* Animation Delays */
+    --delay-xs: 0.1s;
+    --delay-sm: 0.2s;
+    --delay-md: 0.4s;
+    --delay-lg: 0.6s;
+    
+    /* Transform Values */
+    --scale-hover: 1.05;
+    --scale-press: 0.95;
+    --translate-hover: -8px;
+    --rotate-hover: 2deg;
+    
+    /* Color Transitions */
+    --color-transition: color 0.3s var(--ease-smooth);
+    --bg-transition: background 0.3s var(--ease-smooth);
+    --shadow-transition: box-shadow 0.3s var(--ease-smooth);
+}
+
+/* Advanced Modern Keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 60px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 30px, 0) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+@keyframes slideInSpring {
+    from {
+        opacity: 0;
+        transform: translate3d(-100px, 0, 0) scale(0.8) rotate(-5deg);
+    }
+    60% {
+        opacity: 1;
+        transform: translate3d(10px, 0, 0) scale(1.05) rotate(1deg);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+    }
+}
+
+@keyframes morphIn {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 0, 0) scale(0.3) rotate(45deg);
+        border-radius: 50%;
+    }
+    50% {
+        opacity: 0.8;
+        transform: translate3d(0, 0, 0) scale(1.1) rotate(5deg);
+        border-radius: 20%;
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+        border-radius: 16px;
+    }
+}
+
+@keyframes floatGentle {
+    0%, 100% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+    25% {
+        transform: translate3d(-2px, -6px, 0) rotate(0.5deg);
+    }
+    50% {
+        transform: translate3d(0, -8px, 0) rotate(0deg);
+    }
+    75% {
+        transform: translate3d(2px, -6px, 0) rotate(-0.5deg);
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+    }
+    50% {
+        box-shadow: 0 4px 30px rgba(0, 123, 255, 0.6), 0 0 0 10px rgba(0, 123, 255, 0.1);
+    }
+}
+
+@keyframes textReveal {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 100%, 0);
+        clip-path: inset(100% 0 0 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes shimmerSweep {
+    0% {
+        background-position: -200% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
 *{
     margin: 0;
     padding: 0;
@@ -141,12 +303,20 @@ header, .header-info h4, .header-info h6 {
                 box-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
+/* Optimize for smooth scrolling and animations */
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: "Inter", sans-serif;
     background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 50%, #e2e8f0 100%);
     background-attachment: fixed;
     padding-top: 7.5rem; /* Account for larger fixed navbar */
     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Improve scroll performance */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 }
 
 header {
@@ -1663,7 +1833,7 @@ footer{
 }
 
 .exp-item:hover {
-    transform: translateY(-12px) scale(1.03) rotateX(2deg);
+    transform: translate3d(0, -12px, 0) scale(1.03) rotateX(2deg);
     box-shadow: 
         0 40px 80px rgba(0, 123, 255, 0.2), 
         0 20px 40px rgba(0, 0, 0, 0.1),
@@ -1682,7 +1852,7 @@ footer{
         0 35px 70px rgba(0, 123, 255, 0.18), 
         0 15px 35px rgba(0, 0, 0, 0.08),
         0 0 0 1px rgba(0, 123, 255, 0.15);
-    transform: translateY(-6px) scale(1.02);
+    transform: translate3d(0, -6px, 0) scale(1.02);
     transition: all 3.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s;
 }
 
@@ -1700,7 +1870,7 @@ footer{
 }
 
 .edu-item:hover {
-    transform: translateY(-6px) scale(1.01);
+    transform: translate3d(0, -6px, 0) scale(1.01);
     box-shadow: 0 25px 50px rgba(34, 197, 94, 0.15), 0 10px 25px rgba(0, 0, 0, 0.08);
     border-left-color: #16a34a;
     border-color: rgba(34, 197, 94, 0.1);
@@ -2486,69 +2656,91 @@ body.dark-mode .exp-details h6 {
 /* Enhanced Scroll-Triggered Animations */
 .hidden-scroll {
     opacity: 0;
-    transform: translateY(50px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
+    transform: translate3d(0, 50px, 0);
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
 }
 
 .animate-in {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
 }
 
 .hidden-item {
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transform: translate3d(0, 30px, 0);
+    transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
 }
 
 .slide-in {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
+}
+
+/* Missing skill animations */
+.hidden-skill {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0) scale(0.9);
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
+}
+
+.slideInSkill {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
 }
 
 /* Special animation for BERRIES section */
 .BERRIES {
     opacity: 0;
-    transform: translateY(40px);
-    transition: all 0.8s ease;
+    transform: translate3d(0, 40px, 0);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
 }
 
 .BERRIES.animate-in {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
 }
 
 .BERRIES h4 {
     opacity: 0;
-    transform: translateX(-30px);
-    transition: all 0.8s ease 0.2s;
+    transform: translate3d(-30px, 0, 0);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
+    will-change: opacity, transform;
 }
 
 .BERRIES.animate-in h4 {
     opacity: 1;
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
 }
 
 .BERRIES p {
     opacity: 0;
-    transform: translateX(-30px);
-    transition: all 0.8s ease 0.4s;
+    transform: translate3d(-30px, 0, 0);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s;
+    will-change: opacity, transform;
 }
 
 .BERRIES.animate-in p {
     opacity: 1;
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
 }
 
 .BERRIES span {
     opacity: 0;
-    transform: scale(0.8);
-    transition: all 0.6s ease 0.6s;
+    transform: scale(0.8) translate3d(0, 0, 0);
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s;
+    will-change: opacity, transform;
 }
 
 .BERRIES.animate-in span {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translate3d(0, 0, 0);
 }
 
 /* Enhanced hero animations */
@@ -2556,8 +2748,9 @@ body.dark-mode .exp-details h6 {
 .hero .content .info h2, 
 .hero .content .info h6 {
     opacity: 0;
-    transform: translateX(-50px);
-    animation: slideInHeroStagger 1s ease forwards;
+    transform: translate3d(-50px, 0, 0);
+    animation: slideInHeroStagger 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    will-change: opacity, transform;
 }
 
 .hero .content .info h1 { animation-delay: 0.2s; }
@@ -2567,7 +2760,7 @@ body.dark-mode .exp-details h6 {
 @keyframes slideInHeroStagger {
     to {
         opacity: 1;
-        transform: translateX(0);
+        transform: translate3d(0, 0, 0);
     }
 }
 
@@ -2714,11 +2907,12 @@ body.dark-mode .exp-details h6 {
     flex-direction: column;
     align-items: center;
     gap: 0.75rem;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
 }
 
 .grid-item:hover {
-    transform: translateY(-5px);
+    transform: translate3d(0, -5px, 0);
 }
 
 .skill-info {
@@ -2742,7 +2936,8 @@ body.dark-mode .exp-details h6 {
     background: linear-gradient(90deg, #007bff, #28a745);
     border-radius: 3px;
     width: 0%;
-    transition: width 1.5s ease;
+    transition: width 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: width;
 }
 
 .progress-bar.animate {
